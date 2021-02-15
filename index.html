@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-	<title>Ton & X</title>
+	<title>Hello, AR Cube!</title>
 	<!-- include three.js library -->
 	<script src='js/three.js'></script>
 	<!-- include jsartookit -->
@@ -12,6 +12,7 @@
 	<script src="threex/threex-artoolkitcontext.js"></script>
 	<script src="threex/threex-arbasecontrols.js"></script>
 	<script src="threex/threex-armarkercontrols.js"></script>
+	<script src="threex/threex-arsmoothedcontrols.js"></script>
 </head>
 
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
@@ -25,11 +26,11 @@
 
 var scene, camera, renderer, clock, deltaTime, totalTime;
 
-var arToolkitSource, arToolkitContext;
+var arToolkitSource, arToolkitContext, smoothedControls;
 
-var markerRoot1;
+var markerRoot1, markerRoot2;
 
-var mesh1;
+var portal, portalMaterial;
 
 initialize();
 animate();
@@ -40,7 +41,7 @@ function initialize()
 
 	let ambientLight = new THREE.AmbientLight( 0xcccccc, 0.5 );
 	scene.add( ambientLight );
-
+				
 	camera = new THREE.Camera();
 	scene.add(camera);
 
@@ -106,49 +107,148 @@ function initialize()
 	////////////////////////////////////////////////////////////
 
 	// build markerControls
-	markerRoot1 = new THREE.Group();
-	scene.add(markerRoot1);
-	let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
-		type: 'pattern', patternUrl: "data/tonx-marker.patt",
+	kanjiMarker = new THREE.Group();
+	scene.add(kanjiMarker);
+	
+	let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, kanjiMarker, {
+		type : 'pattern',
+		patternUrl : "data/tonx-marker.patt",
 	})
 
-	let geometry1 = new THREE.SphereGeometry(1, 32,32);
+	// interpolates from last position to create smoother transitions when moving.
+	// parameter lerp values near 0 are slow, near 1 are fast (instantaneous).
+	let smoothedRoot = new THREE.Group();
+	scene.add(smoothedRoot);
+	smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
+		lerpPosition: 0.5,
+		lerpQuaternion: 0.5,
+		lerpScale: 1,
+		// minVisibleDelay: 1,
+		// minUnvisibleDelay: 1,
+	});
+
+	////////////////////////////////////////////////////////////
+	// setup scene
+	////////////////////////////////////////////////////////////
 	
 	let loader = new THREE.TextureLoader();
-	let texture = loader.load( 'images/earth-sphere.jpg', render );
-	let material1 = new THREE.MeshLambertMaterial( { map: texture, opacity: 0.5 } );
 	
-	mesh1 = new THREE.Mesh( geometry1, material1 );
-	mesh1.position.y = 1;
+	// material for portal (for debugging)
 	
-	markerRoot1.add( mesh1 );
+	let defaultMaterial = new THREE.MeshBasicMaterial({
+		map: loader.load("images/sphere-colored.png"), 
+		color: 0x444444,
+		side: THREE.DoubleSide,
+		transparent: true,
+		opacity: 0.6
+	});
 	
-	let pointLight = new THREE.PointLight( 0xffffff, 1, 100 );
-	pointLight.position.set(0.5,3,2);
-	// create a mesh to help visualize the position of the light
-	pointLight.add( 
-		new THREE.Mesh( 
-			new THREE.SphereBufferGeometry( 0.05, 16,8 ), 
-			new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0.5 }) 
-		) 
+	let portalWidth = 2;
+	let portalHeight = 4;
+	let portalBorder = 0.1;
+	
+	portal = new THREE.Mesh(
+		new THREE.PlaneGeometry(portalWidth, portalHeight),
+		defaultMaterial
 	);
-	markerRoot1.add( pointLight );
+	portal.position.y = portalHeight/2 + portalBorder;
+	portal.layers.set(1);
+	smoothedRoot.add(portal);
+	
+	camera.layers.enable(1);
+	
+	portalMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, side: THREE.DoubleSide, transparent:true, opacity: 0.75 });
+	
+	
+	let portalBorderMesh = new THREE.Mesh(
+		new THREE.PlaneGeometry(portalWidth + 2*portalBorder, portalHeight + 2*portalBorder),
+		portalMaterial
+	);
+	portalBorderMesh.position.y = portal.position.y;
+	portalBorderMesh.layers.set(0);
+	smoothedRoot.add(portalBorderMesh);
+	
+	// the earth beyond the portal
+	let texture = loader.load( 'images/earth.jpg', render );
+	let skyMaterial = new THREE.MeshBasicMaterial( { map: texture } );
+	let skyMesh = new THREE.Mesh(
+		new THREE.BoxGeometry(30,30,1,1,1,1),
+		skyMaterial );
+	skyMesh.layers.set(2);
+	smoothedRoot.add(skyMesh);
+
 }
 
 
 function update()
 {
-	if ( markerRoot1.visible )
-		mesh1.rotation.y += 0.01;
+	// portal ring color cycle
+	portalMaterial.color.setHSL( totalTime/10 % 1, 1, 0.75 );
+	
 	// update artoolkit on every frame
 	if ( arToolkitSource.ready !== false )
 		arToolkitContext.update( arToolkitSource.domElement );
+		
+	// additional code for smoothed controls
+	smoothedControls.update(kanjiMarker);
 }
 
 
 function render()
 {
+	//renderer.render( scene, camera );
+
+	let gl = renderer.context;
+	
+	// clear buffers now: color, depth, stencil 
+	renderer.clear(true,true,true);
+	// do not clear buffers before each render pass
+	renderer.autoClear = false;
+		
+	// FIRST PASS
+	// goal: using the stencil buffer, place 1's in position of first portal (layer 1)
+
+	// enable the stencil buffer
+	gl.enable(gl.STENCIL_TEST);
+	
+	// layer 1 contains only the first portal
+	camera.layers.set(1); 
+
+	gl.stencilFunc(gl.ALWAYS, 1, 0xff);
+	gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+	gl.stencilMask(0xff);
+
+	// only write to stencil buffer (not color or depth)
+	gl.colorMask(false,false,false,false);
+	gl.depthMask(false);
+	
 	renderer.render( scene, camera );
+
+	// SECOND PASS
+	// goal: render skybox (layer 2) but only through portal
+	
+	gl.colorMask(true,true,true,true);
+	gl.depthMask(true);
+	
+	gl.stencilFunc(gl.EQUAL, 1, 0xff);
+	gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
+	
+	camera.layers.set(2);
+	renderer.render( scene, camera );
+	
+	// FINAL PASS
+	// goal: render the rest of the scene (layer 0)
+	
+	// using stencil buffer simplifies drawing border around portal
+	gl.stencilFunc(gl.NOTEQUAL, 1, 0xff);
+	gl.colorMask(true,true,true,true);
+	gl.depthMask(true);
+	
+	camera.layers.set(0); // layer 0 contains portal border mesh
+	renderer.render( scene, camera );
+	
+	// set things back to normal
+	renderer.autoClear = true;
 }
 
 
