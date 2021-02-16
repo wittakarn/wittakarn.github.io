@@ -7,25 +7,18 @@
 <body>
   <a-scene>
     <a-assets>
-      <video id="heroVideo" autoplay loop="true" preload="auto" src="video/mess.mp4"></video>
+      <video id="heroVideo" loop="true" preload="auto" src="video/mess.mp4"></video>
     </a-assets>
 
     <!-- Using the asset management system. -->
-    <a-videosrc="#heroVideo" width="16" height="16" position="0 0 -20">
+    <a-videosrc="#heroVideo" width="16" height="16" position="0 0 -4">
       </a-video>
   </a-scene>
 </body>
 <script>
   var $heroVideo = document.getElementById("heroVideo");
   var heroVideoReady = false
-
-  $heroVideo.onloadeddata = function () {
-    if (heroVideoReady) {
-      $heroVideo.play()
-    } else {
-      heroVideoReady = true
-    }
-  };
+  $heroVideo.play()
 </script>
 
 </html>
