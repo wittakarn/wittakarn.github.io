@@ -17,14 +17,12 @@
 	<a-scene embedded arjs>
 		<a-marker type="pattern" url="patterns/tonx-marker.patt">
 			<!-- Using the asset management system. -->
-			<a-video src="#heroVideo" width="4" height="4" position="0 0 0"></a-video>
+			<a-video src="#heroVideo" width="4" height="4" position="0 0 0" rotation="-90 0 0"></a-video>
 		</a-marker>
 		<a-entity camera></a-entity>
 	</a-scene>
 </body>
 <script>
-	var $heroVideo = document.getElementById("heroVideo");
-	var heroVideoReady = false
-	$heroVideo.play()
+	document.getElementById("heroVideo").play();
 </script>
 </html>
