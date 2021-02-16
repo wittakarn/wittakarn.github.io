@@ -27,8 +27,8 @@
 	$heroVideo.src = "video/mess.mp4";
 	$heroVideo.load();
 	
-	$heroVideo.onloadeddata = function() {
-		this.play();
-	};
+	$heroVideo.addEventListener('loadedmetadata', function () { 
+		$heroVideo.play();
+	});
   </script>
 </html>
