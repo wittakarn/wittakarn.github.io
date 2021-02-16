@@ -4,8 +4,12 @@
   </head>
   <body>
     <a-scene>
-      <a-video autoplay loop="true" src="video/mess.mp4"></a-video>
-      <a-sky color="#ECECEC"></a-sky>
+      <a-assets>
+        <video id="mess" autoplay loop="true" src="video/mess.mp4"></video>
+      </a-assets>
+    
+      <!-- Using the asset management system. -->
+      <a-video src="#mess" width="16" height="16" position="0 0 -20"></a-video>
     </a-scene>
   </body>
 </html>
