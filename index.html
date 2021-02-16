@@ -13,10 +13,10 @@
 
 <body style="margin : 0px; overflow: hidden;">
 	<a-scene embedded arjs>
-		<a-assets>
-			<video id="mess" autoplay loop="true" src="video/mess.mp4"></video>
-		</a-assets>
 		<a-marker type="pattern" url="patterns/tonx-marker.patt">
+			<a-assets>
+				<video id="mess" autoplay loop="true" preload="auto" src="video/mess.mp4"></video>
+			</a-assets>
 			<!-- Using the asset management system. -->
 			<a-video webkit-playsinline playsinline src="#mess" width="16" height="16" position="0 0 -20">
 			</a-video>
