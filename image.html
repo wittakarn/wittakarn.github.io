@@ -11,7 +11,11 @@
 </head>
 
 <body style="margin : 0px; overflow: hidden;">
-	<a-scene embedded arjs>
+	<a-scene
+      vr-mode-ui="enabled: false;"
+      renderer="logarithmicDepthBuffer: true;"
+      embedded
+      arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;">
 		<a-assets>
 			<video id="frontVideo" muted="muted" loop="true" preload="auto" src="video/clap.mp4"></video>
 			<video id="bottomVideo" muted="muted" loop="true" preload="auto" src="video/mess.mp4"></video>
