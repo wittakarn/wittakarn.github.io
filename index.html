@@ -20,6 +20,23 @@
 			<!-- Using the asset management system. -->
 			<a-video src="#frontVideo" width="2" height="2" position="0 0.8 -0.8" rotation="0 0 0"></a-video>
 			<a-video src="#bottomVideo" width="2" height="2" position="0 0 0" rotation="-90 0 0"></a-video>
+
+			<a-entity position="0 0 0"
+				spe-particles="
+				texture: images/diamond.png;
+				color: yellow, red, cyan, black; 
+				distribution: sphere; 
+				randomize-velocity: true;
+				radius: 10; 
+				particle-count: 3000; 
+				velocity: 1; 
+				velocity-spread: 0.5; 
+				drag: 1; 
+				max-age: 2;
+				blending: additive;
+				active-multiplier: 1000; 
+				size: 1, 1, 1, 0">
+			</a-entity>
 		</a-marker>
 		<a-entity camera></a-entity>
 	</a-scene>
