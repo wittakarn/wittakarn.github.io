@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>AR</title>
+	<meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<script src="js/aframe.min.js"></script>
+	<script src="js/aframe-ar.js"></script>
+	<script src="js/aframe-gif-shader.min.js"></script>
+</head>
+
+<body style="margin : 0px; overflow: hidden;">
+	<a-scene embedded arjs>
+		<a-assets>
+			<img id="banana" src="images/banana.gif">
+		</a-assets>
+		<a-marker type="pattern" url="patterns/tonx-marker.patt">
+			<a-entity position="0 0 -5">
+				<a-entity geometry="primitive:plane;width:2;height:2;" position="-1.2 -2.125 -1" material="shader:gif;src:#banana;repeat: 2 2;alphaTest:0.5;"></a-entity>
+				<a-entity geometry="primitive:plane;width:2;height:2;" position="1.2 -2.125 -1" material="src:#banana;repeat: 2 2;"></a-entity>
+			</a-entity>
+		</a-marker>
+		<a-entity camera></a-entity>
+	</a-scene>
+</body>
+
+</html>
