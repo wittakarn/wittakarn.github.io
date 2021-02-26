@@ -10,10 +10,11 @@
     <a-scene>
         <a-assets>
             <img id="banana" src="images/banana.gif">
+            <img id="map" src="images/map-icon.gif">
         </a-assets>
-        <a-entity position="0 0 -5">
-            <a-entity geometry="primitive:plane;width:2;height:2;" position="-1.2 -2.125 -1" material="shader:gif;src:#banana;repeat: 2 2;alphaTest:0.5;"></a-entity>
-            <a-entity geometry="primitive:plane;width:2;height:2;" position="1.2 -2.125 -1" material="shader:gif;src:#banana;alphaTest:0.5;"></a-entity>
+        <a-entity position="0 0 0">
+            <a-entity geometry="primitive:plane;width:2;height:2;" position="0 0 0" material="shader:gif;src:#banana;alphaTest:0.5;"></a-entity>
+            <a-entity geometry="primitive:plane;width:1;height:1;" position="0 0 0" material="shader:gif;src:#map;alphaTest:0.5;"></a-entity>
         </a-entity>
     </a-scene>
 </body>
