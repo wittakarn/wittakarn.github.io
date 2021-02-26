@@ -2,30 +2,38 @@
 <html>
 
 <head>
-	<title>AR</title>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<script src="js/aframe.min.js"></script>
-	<script src="js/aframe-ar.js"></script>
+    <title>AR</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="js/aframe.min.js"></script>
+    <script src="js/aframe-ar.js"></script>
+    <script src="js/aframe-gif-component.min.js"></script>
 </head>
 
 <body style="margin : 0px; overflow: hidden;">
-	<a-assets>
-		<video id="frontVideo" muted="muted" loop="true" preload="auto" src="video/clap.mp4"></video>
-		<video id="bottomVideo" muted="muted" loop="true" preload="auto" src="video/mess.mp4"></video>
-	</a-assets>
-	<a-scene embedded arjs>
-		<a-marker type="pattern" url="patterns/tonx-marker.patt">
-			<!-- Using the asset management system. -->
-			<a-video src="#frontVideo" width="2" height="2" position="0 0.8 -0.8" rotation="0 0 0"></a-video>
-			<a-video src="#bottomVideo" width="2" height="2" position="0 0 0" rotation="-90 0 0"></a-video>
-		</a-marker>
-		<a-entity camera></a-entity>
-	</a-scene>
+    <a-scene embedded arjs>
+        <a-assets>
+            <img id="banana" src="images/banana.gif">
+            <img id="map" src="images/map-transparent.gif">
+        </a-assets>
+        <a-marker type="pattern" url="patterns/tonx-marker.patt" cursor='rayOrigin: mouse'>
+            <a-entity position="0 0 0">
+                <a-entity geometry="primitive:plane;width:1;height:1;" position="0 0 0" rotation="-90 0 0"
+                    material="shader:gif;src:#banana;alphaTest:0.5;"></a-entity>
+                <a-entity id="mapElement" geometry="primitive:plane;width:2;height:2;" position="0 0 1.2" rotation="-90 0 0"
+                    material="shader:gif;src:#map;alphaTest:0.5;"></a-entity>
+            </a-entity>
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
 </body>
 <script>
-	document.getElementById("frontVideo").play();
-	document.getElementById("bottomVideo").play();
+    var $mapElement = document.querySelector('#mapElement');
+    $mapElement.addEventListener("click", openMap);
+
+    function openMap() {
+        window.open('https://goo.gl/maps/4c1HF9U3yHEYp2DG7', '_blank');
+    }
 </script>
 
 </html>
