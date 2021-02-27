@@ -12,18 +12,12 @@
             <img id="map" src="images/map-transparent.gif">
         </a-assets>
         <a-entity position="0 0 -5">
-            <a-entity geometry="primitive:plane;width:2;height:2;" position="0 0 0" material="shader:gif;src:#banana;alphaTest:0.5;"></a-entity>
-            <a-entity id="mapElement" geometry="primitive:plane;width:2;height:2;" position="0 -2 0" material="shader:gif;src:#map;alphaTest:0.5;"></a-entity>
+            <a-entity geometry="primitive:plane;width:2;height:2;" position="0 0 0"
+                material="shader:gif;src:#banana;alphaTest:0.5;"></a-entity>
+            <a-entity id="mapElement" geometry="primitive:plane;width:2;height:2;" position="0 -2 0"
+                material="shader:gif;src:#map;alphaTest:0.5;"></a-entity>
         </a-entity>
     </a-scene>
 </body>
-<script>
-    var $mapElement = document.querySelector('#mapElement');
-    $mapElement.addEventListener("click", openMap);
-
-    function openMap() {
-        window.open('https://goo.gl/maps/4c1HF9U3yHEYp2DG7', '_blank');
-    }
-</script>
 
 </html>
