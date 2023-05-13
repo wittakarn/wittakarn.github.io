@@ -16,7 +16,7 @@
   <a-scene>
     <a-assets>
       <video id="frontVideo" muted="muted" loop="true" preload="auto" src="video/clap.mp4"></video>
-      <video id="rightVideo" autoplay loop="true" preload="auto" src="video/mosquito.mp4"></video>
+      <video id="rightVideo" loop="true" preload="auto" src="video/mosquito.mp4"></video>
       <video id="bottomVideo" muted="muted" loop="true" preload="auto" src="video/mess.mp4"></video>
     </a-assets>
     <!-- Using the asset management system. -->
@@ -27,6 +27,7 @@
 </body>
 <script>
   document.getElementById("frontVideo").play();
+  document.getElementById("rightVideo").play();
   document.getElementById("bottomVideo").play();
 </script>
 
