@@ -15,10 +15,12 @@
             <video id="video" autoplay loop="true" preload="auto" src="video/mosquito.mp4"></video>
         </a-assets>
         <a-marker type="pattern" url="patterns/tonx-marker.patt" cursor='rayOrigin: mouse'>
-            <a-video src="#video" width="8" height="8" position="0 3 -8" rotation="0 0 0"></a-video>
+            <a-video src="#video" width="8" position="0 3 0" rotation="0 0 0"></a-video>
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
 </body>
-
+<script>
+    document.getElementById("video").play();
+  </script>
 </html>

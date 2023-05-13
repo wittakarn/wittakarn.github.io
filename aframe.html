@@ -12,7 +12,7 @@
   </style>
 </head>
 
-<body>
+<body onload="playVideo()">
   <a-scene>
     <a-assets>
       <video id="frontVideo" muted="muted" loop="true" preload="auto" src="video/clap.mp4"></video>
@@ -26,9 +26,11 @@
   </a-scene>
 </body>
 <script>
-  document.getElementById("frontVideo").play();
-  document.getElementById("rightVideo").play();
-  document.getElementById("bottomVideo").play();
+  function playVideo() {
+    document.getElementById("frontVideo").play();
+    document.getElementById("rightVideo").play();
+    document.getElementById("bottomVideo").play();
+  }
 </script>
 
 </html>
