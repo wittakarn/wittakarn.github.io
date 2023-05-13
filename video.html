@@ -7,16 +7,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <script src="js/aframe.min.js"></script>
     <script src="js/aframe-ar.js"></script>
+    <script src="js/aframe-extras.min.js"></script>
+    <script src="js/aframe-gif-shader.min"></script>
 </head>
 
 <body style="margin : 0px; overflow: hidden;">
     <a-scene embedded arjs>
         <a-assets>
-            <video id="vid" src="video/mosquito.mp4" crossorigin></video>
+            <video id="vid" src="video/mosquito.mp4" loop="true" crossorigin></video>
         </a-assets>
-        <a-marker type="pattern" url="patterns/tonx-marker.patt" cursor='rayOrigin: mouse'>
+        <a-marker type="pattern" url="patterns/tonx-marker.patt" cursor='rayOrigin: mouse' vidhandler>
             <a-plane position='1 2 0' scale="2 2 2" width="2" rotation="-90 0 0"
-                material='transparent:true; opacity: 0.7; src:#vid'></a-plane>
+                material='transparent:true; opacity: 0.8; src:#vid'></a-plane>
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
@@ -30,7 +32,7 @@
             this.vid.pause()
         },
         tick: function () {
-            if (this.el.object3D.visible == true) {
+            if (this.el.object3D.visible) {
                 if (!this.toggle) {
                     this.toggle = true;
                     this.vid.play();
