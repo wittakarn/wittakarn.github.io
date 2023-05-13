@@ -16,11 +16,8 @@
         <a-assets>
             <video id="vid" src="video/mosquito.mp4" loop="true" crossorigin></video>
         </a-assets>
-        <a-marker type="pattern" url="patterns/tonx-marker.patt" cursor='rayOrigin: mouse' vidhandler>
-            <a-entity position="0 0 0">
-                <a-entity geometry="primitive:plane;width:1;height:1;" position="0 0 0" rotation="-90 0 0"
-                    material="shader:gif;src:#vid;alphaTest:0.5;"></a-entity>
-            </a-entity>
+        <a-marker type="pattern" url="patterns/tonx-marker.patt" cursor='rayOrigin: mouse'>
+            <a-video vidhandler  position="0 0.2 0" src="#vid" rotation="0 0 0"></a-video>
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
