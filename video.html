@@ -12,15 +12,35 @@
 <body style="margin : 0px; overflow: hidden;">
     <a-scene embedded arjs>
         <a-assets>
-            <video id="video" autoplay loop="true" preload="auto" src="video/mosquito.mp4"></video>
+            <video id="vid" src="video/mosquito.mp4" crossorigin></video>
         </a-assets>
         <a-marker type="pattern" url="patterns/tonx-marker.patt" cursor='rayOrigin: mouse'>
-            <a-video src="#video" width="8" position="0 3 0" rotation="0 0 0"></a-video>
+            <a-plane position='1 2 0' scale="2 2 2" width="2" rotation="-90 0 0"
+                material='transparent:true; opacity: 0.7; src:#vid'></a-plane>
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
 </body>
+
 <script>
-    document.getElementById("video").play();
-  </script>
+    AFRAME.registerComponent('vidhandler', {
+        init: function () {
+            this.toggle = false;
+            this.vid = document.querySelector("#vid")
+            this.vid.pause()
+        },
+        tick: function () {
+            if (this.el.object3D.visible == true) {
+                if (!this.toggle) {
+                    this.toggle = true;
+                    this.vid.play();
+                }
+            } else {
+                this.toggle = false;
+                this.vid.pause();
+            }
+        }
+    });
+</script>
+
 </html>
