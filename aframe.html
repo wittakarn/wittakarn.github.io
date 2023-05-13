@@ -16,10 +16,12 @@
   <a-scene>
     <a-assets>
       <video id="frontVideo" muted="muted" loop="true" preload="auto" src="video/clap.mp4"></video>
+      <video id="rightVideo" autoplay loop="true" preload="auto" src="video/mosquito.mp4"></video>
       <video id="bottomVideo" muted="muted" loop="true" preload="auto" src="video/mess.mp4"></video>
     </a-assets>
     <!-- Using the asset management system. -->
     <a-video src="#frontVideo" width="8" height="8" position="0 3 -8" rotation="0 0 0"></a-video>
+    <a-video src="#rightVideo" width="8" height="8" position="0 -3 -8" rotation="0 0 0"></a-video>
     <a-video src="#bottomVideo" width="8" height="8" position="0 0 -5" rotation="-90 0 0"></a-video>
   </a-scene>
 </body>
